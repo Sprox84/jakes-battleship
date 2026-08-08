@@ -53,9 +53,24 @@
     const layer = document.createElement('div');
     layer.className = 'coordinateLayer';
     layer.setAttribute('aria-hidden', 'true');
-    layer.innerHTML = '<span class="coordinateCorner">⌖</span>' +
-      [...letters].map(letter => `<span class="coordinateLabel column">${letter}</span>`).join('') +
-      Array.from({ length: 10 }, (_, row) => `<span class="coordinateLabel row">${row + 1}</span>`).join('');
+    const corner = document.createElement('span');
+    corner.className = 'coordinateCorner';
+    corner.textContent = '⌖';
+    layer.appendChild(corner);
+
+    [...letters].forEach(letter => {
+      const label = document.createElement('span');
+      label.className = 'coordinateLabel column';
+      label.textContent = letter;
+      layer.appendChild(label);
+    });
+
+    Array.from({ length: 10 }, (_, row) => row + 1).forEach(row => {
+      const label = document.createElement('span');
+      label.className = 'coordinateLabel row';
+      label.textContent = String(row);
+      layer.appendChild(label);
+    });
     stage.appendChild(layer);
 
     const name = boardName(board);
