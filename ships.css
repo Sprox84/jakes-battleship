@@ -1,0 +1,223 @@
+/* Top-down ship models. Each class has its own silhouette and deck layout,
+   while remaining CSS-only so ships scale cleanly on phone and desktop. */
+.ship {
+  isolation: isolate;
+  filter: drop-shadow(0 5px 4px rgba(0, 13, 26, .72));
+}
+
+.ship .hull {
+  z-index: 1;
+  overflow: visible;
+  border: 1px solid rgba(6, 24, 39, .88);
+  box-shadow:
+    inset 0 2px 2px rgba(255, 255, 255, .6),
+    inset 0 -3px 4px rgba(3, 14, 25, .72),
+    0 1px 0 rgba(255, 255, 255, .23);
+}
+
+.ship::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 24%;
+  bottom: 24%;
+  left: -17%;
+  width: 42%;
+  border-radius: 100% 18% 18% 100%;
+  background: linear-gradient(90deg, rgba(213, 248, 255, 0), rgba(206, 246, 255, .45), rgba(172, 230, 249, .08));
+  filter: blur(2px);
+  opacity: .85;
+}
+
+.ship.v::after {
+  top: -17%;
+  bottom: auto;
+  left: 24%;
+  right: 24%;
+  width: auto;
+  height: 42%;
+  border-radius: 100% 100% 18% 18%;
+  background: linear-gradient(180deg, rgba(213, 248, 255, 0), rgba(206, 246, 255, .45), rgba(172, 230, 249, .08));
+}
+
+.shipName {
+  z-index: 4;
+  font-size: clamp(7px, 1.75vw, 10px);
+  letter-spacing: .03em;
+  color: #eff9ff;
+  text-shadow: 0 1px 2px #071721, 0 0 4px #071721;
+}
+
+/* Carrier: wide flight deck with runway, parking marks, and a starboard island. */
+.ship[data-id="carrier"] .hull {
+  inset: 7% 0;
+  border-radius: 46% 46% 42% 42%;
+  background:
+    linear-gradient(90deg, transparent 0 11%, rgba(255,255,255,.3) 11.5% 12.5%, transparent 13% 87%, rgba(255,255,255,.28) 87.5% 88.5%, transparent 89%),
+    repeating-linear-gradient(90deg, transparent 0 11%, rgba(192, 215, 224, .43) 11% 12.5%, transparent 12.5% 22%),
+    linear-gradient(#9eafb9 0%, #718a99 47%, #425c6c 50%, #2b4657 100%);
+}
+
+.ship.v[data-id="carrier"] .hull {
+  inset: 0 7%;
+  background:
+    linear-gradient(180deg, transparent 0 11%, rgba(255,255,255,.3) 11.5% 12.5%, transparent 13% 87%, rgba(255,255,255,.28) 87.5% 88.5%, transparent 89%),
+    repeating-linear-gradient(180deg, transparent 0 11%, rgba(192, 215, 224, .43) 11% 12.5%, transparent 12.5% 22%),
+    linear-gradient(90deg, #9eafb9 0%, #718a99 47%, #425c6c 50%, #2b4657 100%);
+}
+
+.ship[data-id="carrier"] .hull::before {
+  inset: 36% 9%;
+  border: 1px solid rgba(228, 244, 248, .38);
+  background:
+    linear-gradient(90deg, transparent 47%, rgba(245, 252, 255, .92) 47% 53%, transparent 53%),
+    repeating-linear-gradient(90deg, transparent 0 15%, rgba(235, 247, 252, .82) 15% 17%, transparent 17% 31%);
+  opacity: .78;
+}
+
+.ship.v[data-id="carrier"] .hull::before {
+  background:
+    linear-gradient(180deg, transparent 47%, rgba(245, 252, 255, .92) 47% 53%, transparent 53%),
+    repeating-linear-gradient(180deg, transparent 0 15%, rgba(235, 247, 252, .82) 15% 17%, transparent 17% 31%);
+}
+
+.ship[data-id="carrier"] .hull::after {
+  left: 62%; right: auto; top: 20%; bottom: 20%; width: 16%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #253e4d 0 65%, #7290a0 66% 100%);
+  box-shadow: 0 0 0 1px rgba(227, 247, 255, .26);
+}
+
+.ship.v[data-id="carrier"] .hull::after {
+  left: 20%; right: 20%; top: 62%; bottom: auto; width: auto; height: 16%;
+  background: linear-gradient(#253e4d 0 65%, #7290a0 66% 100%);
+}
+
+/* Battleship: armored hull, three heavy gun turrets, and a central bridge. */
+.ship[data-id="battleship"] .hull {
+  inset: 10% 1%;
+  border-radius: 48% 48% 38% 38%;
+  background: linear-gradient(#a4b2b9 0%, #6d8390 40%, #425966 43%, #263e4e 100%);
+}
+
+.ship.v[data-id="battleship"] .hull { inset: 1% 10%; background: linear-gradient(90deg, #a4b2b9 0%, #6d8390 40%, #425966 43%, #263e4e 100%); }
+
+.ship[data-id="battleship"] .hull::before {
+  inset: 20% 10%;
+  background:
+    radial-gradient(circle at 17% 50%, #243b49 0 12%, #c0ccd1 13% 20%, transparent 21%),
+    radial-gradient(circle at 50% 50%, #243b49 0 12%, #c0ccd1 13% 20%, transparent 21%),
+    radial-gradient(circle at 83% 50%, #243b49 0 12%, #c0ccd1 13% 20%, transparent 21%),
+    linear-gradient(90deg, transparent 18%, #203946 18% 35%, transparent 35% 51%, #203946 51% 68%, transparent 68% 82%, #203946 82%);
+  opacity: 1;
+}
+
+.ship.v[data-id="battleship"] .hull::before {
+  background:
+    radial-gradient(circle at 50% 17%, #243b49 0 12%, #c0ccd1 13% 20%, transparent 21%),
+    radial-gradient(circle at 50% 50%, #243b49 0 12%, #c0ccd1 13% 20%, transparent 21%),
+    radial-gradient(circle at 50% 83%, #243b49 0 12%, #c0ccd1 13% 20%, transparent 21%),
+    linear-gradient(180deg, transparent 18%, #203946 18% 35%, transparent 35% 51%, #203946 51% 68%, transparent 68% 82%, #203946 82%);
+}
+
+.ship[data-id="battleship"] .hull::after {
+  left: 42%; right: 42%; top: 17%; bottom: 17%;
+  border-radius: 3px;
+  background: repeating-linear-gradient(90deg, #d2e0e4 0 2px, #3c5664 2px 6px);
+}
+
+.ship.v[data-id="battleship"] .hull::after { background: repeating-linear-gradient(#d2e0e4 0 2px, #3c5664 2px 6px); }
+
+/* Cruiser: a long hull, radar platform, and two lighter turrets. */
+.ship[data-id="cruiser"] .hull {
+  inset: 12% 0;
+  border-radius: 48% 48% 34% 34%;
+  background: linear-gradient(#a9bac1, #66808d 45%, #344d5d 49%, #203a4b);
+}
+
+.ship.v[data-id="cruiser"] .hull { inset: 0 12%; background: linear-gradient(90deg, #a9bac1, #66808d 45%, #344d5d 49%, #203a4b); }
+
+.ship[data-id="cruiser"] .hull::before {
+  inset: 24% 10%;
+  background:
+    radial-gradient(circle at 20% 50%, #d2dfe2 0 12%, #274251 13% 23%, transparent 24%),
+    radial-gradient(circle at 79% 50%, #d2dfe2 0 12%, #274251 13% 23%, transparent 24%),
+    linear-gradient(90deg, transparent 44%, #183b4e 44% 56%, transparent 56%);
+  opacity: 1;
+}
+
+.ship.v[data-id="cruiser"] .hull::before {
+  background:
+    radial-gradient(circle at 50% 20%, #d2dfe2 0 12%, #274251 13% 23%, transparent 24%),
+    radial-gradient(circle at 50% 79%, #d2dfe2 0 12%, #274251 13% 23%, transparent 24%),
+    linear-gradient(180deg, transparent 44%, #183b4e 44% 56%, transparent 56%);
+}
+
+.ship[data-id="cruiser"] .hull::after {
+  left: 46%; right: 46%; top: 4%; bottom: 4%;
+  border-radius: 2px;
+  background: #d7eff2;
+  box-shadow: 0 0 0 2px #315768, 0 0 0 3px rgba(232, 252, 255, .35);
+}
+
+.ship.v[data-id="cruiser"] .hull::after { left: 4%; right: 4%; top: 46%; bottom: 46%; }
+
+/* Destroyer: slim, fast hull with a raised bridge and a larger wake. */
+.ship[data-id="destroyer"] .hull {
+  inset: 18% -2%;
+  border-radius: 50% 50% 32% 32%;
+  background: linear-gradient(#b7c6ca, #708995 43%, #3b5664 47%, #233f50);
+}
+
+.ship.v[data-id="destroyer"] .hull { inset: -2% 18%; background: linear-gradient(90deg, #b7c6ca, #708995 43%, #3b5664 47%, #233f50); }
+
+.ship[data-id="destroyer"] .hull::before {
+  inset: 28% 15%;
+  background: linear-gradient(90deg, transparent 22%, #e3eef0 22% 35%, #294654 36% 62%, #e3eef0 63% 76%, transparent 76%);
+  opacity: .92;
+}
+
+.ship.v[data-id="destroyer"] .hull::before { background: linear-gradient(180deg, transparent 22%, #e3eef0 22% 35%, #294654 36% 62%, #e3eef0 63% 76%, transparent 76%); }
+
+.ship[data-id="destroyer"] .hull::after {
+  left: 44%; right: 44%; top: 6%; bottom: 6%;
+  border-radius: 3px;
+  background: #294858;
+  box-shadow: 0 0 0 1px #b9ced4;
+}
+
+.ship.v[data-id="destroyer"] .hull::after { left: 6%; right: 6%; top: 44%; bottom: 44%; }
+
+.ship[data-id="destroyer"]::after { width: 54%; left: -24%; opacity: 1; }
+.ship.v[data-id="destroyer"]::after { height: 54%; top: -24%; }
+
+/* Submarine: low dark hull, conning tower, and a small periscope. */
+.ship[data-id="submarine"] .hull {
+  inset: 16% -1%;
+  border-radius: 50%;
+  background: linear-gradient(#526b76, #2b4654 42%, #142f3c 47%, #0b202c);
+}
+
+.ship.v[data-id="submarine"] .hull { inset: -1% 16%; background: linear-gradient(90deg, #526b76, #2b4654 42%, #142f3c 47%, #0b202c); }
+
+.ship[data-id="submarine"] .hull::before {
+  inset: 23% 9%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent 22%, #1a3644 22% 38%, #6e8992 39% 61%, #1a3644 62% 78%, transparent 78%);
+  opacity: 1;
+}
+
+.ship.v[data-id="submarine"] .hull::before { background: linear-gradient(180deg, transparent 22%, #1a3644 22% 38%, #6e8992 39% 61%, #1a3644 62% 78%, transparent 78%); }
+
+.ship[data-id="submarine"] .hull::after {
+  left: 44%; right: 44%; top: -16%; bottom: 36%;
+  border-radius: 3px 3px 1px 1px;
+  background: #213d4a;
+  box-shadow: 0 -3px 0 -1px #a5c7ce;
+}
+
+.ship.v[data-id="submarine"] .hull::after { left: -16%; right: 36%; top: 44%; bottom: 44%; box-shadow: -3px 0 0 -1px #a5c7ce; }
+
+/* A sunken ship loses its wake and visual polish, making damage feel heavier. */
+.ship.sunk::after { opacity: 0; }
+.ship.sunk .hull { filter: saturate(.55) brightness(.7); }

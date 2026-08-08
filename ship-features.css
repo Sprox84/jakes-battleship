@@ -1,0 +1,264 @@
+/* Recognizable top-down naval anatomy for every vessel class. */
+.ship .hull::before,
+.ship .hull::after {
+  content: none;
+}
+
+.shipDetails {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.shipDetails::before,
+.shipDetails::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.shipDetails::before {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 12% 28%, rgba(74,48,34,.5) 0 1px, transparent 1.7px),
+    radial-gradient(circle at 64% 72%, rgba(214,214,188,.2) 0 .7px, transparent 1.4px),
+    radial-gradient(circle at 83% 36%, rgba(67,42,30,.42) 0 .8px, transparent 1.6px),
+    repeating-linear-gradient(91deg, transparent 0 13px, rgba(255,255,255,.045) 13px 14px);
+  background-size: 31px 23px, 27px 33px, 19px 29px, auto;
+  mix-blend-mode: multiply;
+  opacity: .75;
+}
+
+.shipDetails::after {
+  z-index: 1;
+  border-top: 1px solid rgba(238, 236, 214, .18);
+  border-bottom: 2px solid rgba(0, 8, 10, .4);
+  box-shadow: inset 0 0 8px rgba(0,0,0,.3);
+}
+
+.shipFeature {
+  position: absolute;
+  z-index: 3;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  height: var(--h);
+  transform: translate(-50%, -50%);
+  transform-origin: 50% 50%;
+  box-sizing: border-box;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,.8));
+}
+
+.ship.v .shipFeature {
+  left: var(--y);
+  top: var(--x);
+  width: var(--h);
+  height: var(--w);
+  transform: translate(-50%, -50%);
+}
+
+/* Carrier flight deck */
+.shipFeature.runway {
+  z-index: 2;
+  height: max(2px, var(--h));
+  border-top: 1px solid rgba(235, 231, 203, .68);
+  border-bottom: 1px solid rgba(235, 231, 203, .4);
+  background: repeating-linear-gradient(90deg, #ebe8cf 0 5%, transparent 5% 12%);
+  opacity: .9;
+}
+.ship.v .shipFeature.runway { width: max(2px, var(--h)); height: var(--w); background: repeating-linear-gradient(180deg, #ebe8cf 0 5%, transparent 5% 12%); }
+
+.shipFeature.deckMark { background: rgba(230, 226, 199, .58); box-shadow: 0 0 0 1px rgba(22,29,28,.3); }
+
+.shipFeature.elevator {
+  z-index: 2;
+  border: 1px solid rgba(226, 221, 193, .43);
+  background: linear-gradient(135deg, rgba(32,38,36,.26), rgba(214,210,185,.12));
+  box-shadow: inset 0 0 0 1px rgba(14,20,19,.35);
+}
+
+.shipFeature.island {
+  z-index: 6;
+  border: 1px solid #222a29;
+  border-radius: 18% 28% 22% 18%;
+  background:
+    linear-gradient(90deg, #303b3a 0 58%, #78817a 59% 78%, #242e2e 79%),
+    #3f4946;
+  box-shadow: inset 1px 1px rgba(255,255,255,.22), 0 1px 2px #000b;
+}
+.shipFeature.island::before {
+  content: "";
+  position: absolute;
+  left: 57%; top: 12%; bottom: 12%; width: 14%;
+  background: repeating-linear-gradient(#9cc0c1 0 2px, #152124 2px 4px);
+}
+
+.shipFeature.plane {
+  z-index: 5;
+  background: #bbc0b7;
+  clip-path: polygon(0 42%,35% 38%,43% 0,57% 0,65% 38%,100% 42%,100% 58%,64% 56%,58% 100%,42% 100%,36% 56%,0 58%);
+  opacity: .86;
+}
+
+/* Gun systems */
+.shipFeature.turret {
+  z-index: 7;
+  border: 1px solid #20292a;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 30%, #c1c4ba 0 14%, #69716d 16% 55%, #2f3939 58% 100%);
+  box-shadow: inset 0 1px rgba(255,255,255,.27), 0 1px 2px #000;
+}
+.shipFeature.turret::after {
+  content: "";
+  position: absolute;
+  left: 52%; top: 37%; width: 105%; height: 20%;
+  border-radius: 0 99px 99px 0;
+  background: linear-gradient(#aeb3ab, #3c4748);
+  box-shadow: 0 1px 1px #0008;
+}
+.ship.v .shipFeature.turret::after {
+  left: 40%;
+  top: 52%;
+  width: 20%;
+  height: 105%;
+  border-radius: 0 0 99px 99px;
+}
+.shipFeature.turret.heavy::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  left: 52%; top: 62%; width: 98%; height: 15%;
+  border-radius: 0 99px 99px 0;
+  background: linear-gradient(#aeb3ab, #3c4748);
+}
+.ship.v .shipFeature.turret.heavy::before {
+  left: 62%;
+  top: 52%;
+  width: 15%;
+  height: 98%;
+  border-radius: 0 0 99px 99px;
+}
+.shipFeature.turret.light::after { width: 86%; height: 16%; top: 42%; }
+.ship.v .shipFeature.turret.light::after { left: 42%; top: 52%; width: 16%; height: 86%; }
+
+.shipFeature.bridge {
+  z-index: 6;
+  border: 1px solid #20292a;
+  clip-path: polygon(0 20%,25% 0,75% 0,100% 20%,90% 100%,10% 100%);
+  background: linear-gradient(90deg, #3b4746, #9a9f96 44%, #56615e 62%, #293434);
+  box-shadow: inset 0 1px rgba(255,255,255,.25);
+}
+.shipFeature.bridge::before {
+  content: "";
+  position: absolute;
+  left: 12%; right: 12%; top: 12%; height: 22%;
+  background: repeating-linear-gradient(90deg, #a4c0bd 0 12%, #162326 13% 22%);
+}
+
+.shipFeature.funnel {
+  z-index: 7;
+  border: 1px solid #1b2223;
+  border-radius: 48%;
+  background: radial-gradient(ellipse, #11191a 0 36%, #777e77 39% 66%, #313c3c 69%);
+}
+
+.shipFeature.mast {
+  z-index: 8;
+  min-width: 1px;
+  background: linear-gradient(#aeb5ac, #263233);
+  box-shadow: 0 0 0 .5px #111;
+}
+.shipFeature.mast::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 18%; width: 700%; height: 2px;
+  transform: translateX(-50%);
+  background: #77827d;
+  box-shadow: 0 1px #111;
+}
+.ship.v .shipFeature.mast::after {
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 700%;
+  transform: translate(-50%,-50%);
+}
+.shipFeature.mast.radar::before {
+  content: "";
+  position: absolute;
+  left: 50%; top: 6%; width: 650%; aspect-ratio: 1;
+  transform: translate(-50%,-50%);
+  border: 1px solid #9ca8a2;
+  border-radius: 50%;
+  background: repeating-conic-gradient(#263536 0 12deg, transparent 12deg 30deg);
+}
+
+.shipFeature.lifeboat {
+  z-index: 6;
+  border: 1px solid #33322b;
+  border-radius: 50%;
+  background: linear-gradient(#c3b68e, #74684e 52%, #3e3b32);
+}
+
+.shipFeature.launcher {
+  z-index: 6;
+  border: 1px solid #222a2a;
+  background: repeating-linear-gradient(90deg, #99a19a 0 10%, #283333 11% 25%);
+  transform: translate(-50%,-50%) rotate(-8deg);
+}
+.ship.v .shipFeature.launcher {
+  transform: translate(-50%,-50%) rotate(8deg);
+  background: repeating-linear-gradient(180deg, #99a19a 0 10%, #283333 11% 25%);
+}
+
+/* Submarine anatomy */
+.shipFeature.deckLine { border-top: 1px solid rgba(170,183,177,.42); }
+.shipFeature.sail {
+  z-index: 7;
+  border: 1px solid #0b1416;
+  border-radius: 40%;
+  background: linear-gradient(90deg, #202e31, #697573 48%, #233235 55%, #101d20);
+  box-shadow: inset 1px 0 rgba(255,255,255,.18), 0 1px 2px #000;
+}
+.shipFeature.hatch {
+  z-index: 5;
+  border: 1px solid #172224;
+  border-radius: 50%;
+  background: radial-gradient(circle, #53615f, #182629 65%);
+}
+.shipFeature.periscope {
+  z-index: 9;
+  min-width: 1px;
+  background: #929c95;
+  box-shadow: 0 0 0 .5px #0c1517;
+}
+.shipFeature.periscope::after {
+  content: "";
+  position: absolute;
+  left: -100%; top: 0; width: 300%; height: 16%;
+  background: #aeb6ae;
+  box-shadow: 0 1px #111;
+}
+
+/* Names become selection labels rather than painted-on toy graphics. */
+.shipName {
+  opacity: 0;
+  transition: opacity .15s;
+}
+.ship.sel .shipName,
+.ship.drag .shipName { opacity: .96; }
+
+.ship.sunk .shipDetails {
+  filter: sepia(.45) saturate(.65) brightness(.62);
+}
+
+@media (max-width: 430px) {
+  .shipFeature { filter: drop-shadow(0 .5px .5px rgba(0,0,0,.9)); }
+  .shipFeature.mast::after { height: 1px; }
+  .shipFeature.bridge,
+  .shipFeature.island,
+  .shipFeature.turret { border-width: .5px; }
+}

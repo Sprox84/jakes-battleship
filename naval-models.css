@@ -1,0 +1,412 @@
+/* Scale-model realism pass: leaner hull proportions, restrained naval paint,
+   fine deck equipment, and an explicit after-action fleet reveal. */
+
+.ship {
+  filter:
+    drop-shadow(0 5px 2px rgba(0, 5, 7, .82))
+    drop-shadow(0 1px .5px rgba(226, 235, 222, .25));
+}
+
+.ship::after {
+  top: 31%;
+  bottom: 31%;
+  left: -12%;
+  width: 33%;
+  opacity: .54;
+  filter: blur(3px);
+}
+
+.ship.v::after {
+  top: -12%;
+  left: 31%;
+  right: 31%;
+  width: auto;
+  height: 33%;
+}
+
+.ship .hull {
+  border: 1px solid rgba(5, 10, 10, .96);
+  border-radius: 0;
+  box-shadow:
+    inset 0 1px 0 rgba(244, 242, 216, .3),
+    inset 0 -3px 4px rgba(0, 4, 5, .72),
+    0 0 0 .5px rgba(185, 191, 172, .24);
+}
+
+.ship[data-id="carrier"] .hull {
+  inset: 17% 1%;
+  clip-path: polygon(0 28%, 5% 14%, 84% 5%, 96% 22%, 100% 43%, 100% 57%, 96% 78%, 84% 95%, 5% 86%, 0 72%);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 9%, rgba(20, 25, 23, .19) 9.2% 9.7%, transparent 9.9% 18%),
+    radial-gradient(circle at 19% 30%, rgba(97, 48, 29, .35) 0 .6px, transparent 1.3px),
+    radial-gradient(circle at 76% 72%, rgba(194, 188, 155, .2) 0 .6px, transparent 1.3px),
+    url("textures/steel-grain.svg") center / 90px 70px repeat,
+    linear-gradient(#77786e 0 38%, #595e59 43% 60%, #343d3d 66% 100%);
+}
+
+.ship.v[data-id="carrier"] .hull {
+  inset: 1% 17%;
+  clip-path: polygon(28% 0, 72% 0, 86% 5%, 95% 84%, 78% 96%, 57% 100%, 43% 100%, 22% 96%, 5% 84%, 14% 5%);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 9%, rgba(20, 25, 23, .19) 9.2% 9.7%, transparent 9.9% 18%),
+    radial-gradient(circle at 30% 19%, rgba(97, 48, 29, .35) 0 .6px, transparent 1.3px),
+    radial-gradient(circle at 72% 76%, rgba(194, 188, 155, .2) 0 .6px, transparent 1.3px),
+    url("textures/steel-grain.svg") center / 70px 90px repeat,
+    linear-gradient(90deg, #77786e 0 38%, #595e59 43% 60%, #343d3d 66% 100%);
+}
+
+.ship[data-id="battleship"] .hull,
+.ship[data-id="cruiser"] .hull,
+.ship[data-id="destroyer"] .hull {
+  clip-path: polygon(0 39%, 7% 24%, 79% 10%, 91% 21%, 100% 50%, 91% 79%, 79% 90%, 7% 76%, 0 61%);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 13%, rgba(20, 28, 27, .25) 13.2% 13.8%, transparent 14% 26%),
+    radial-gradient(circle at 16% 35%, rgba(123, 56, 34, .34) 0 .5px, transparent 1.2px),
+    radial-gradient(circle at 62% 68%, rgba(135, 73, 47, .28) 0 .5px, transparent 1.2px),
+    url("textures/steel-grain.svg") center / 76px 58px repeat,
+    linear-gradient(#9a9c92 0 23%, #6e746e 31% 52%, #3e4949 58% 75%, #202b2e 100%);
+}
+
+.ship.v[data-id="battleship"] .hull,
+.ship.v[data-id="cruiser"] .hull,
+.ship.v[data-id="destroyer"] .hull {
+  clip-path: polygon(39% 0, 61% 0, 76% 7%, 90% 79%, 79% 91%, 50% 100%, 21% 91%, 10% 79%, 24% 7%);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 13%, rgba(20, 28, 27, .25) 13.2% 13.8%, transparent 14% 26%),
+    radial-gradient(circle at 35% 16%, rgba(123, 56, 34, .34) 0 .5px, transparent 1.2px),
+    radial-gradient(circle at 68% 62%, rgba(135, 73, 47, .28) 0 .5px, transparent 1.2px),
+    url("textures/steel-grain.svg") center / 58px 76px repeat,
+    linear-gradient(90deg, #9a9c92 0 23%, #6e746e 31% 52%, #3e4949 58% 75%, #202b2e 100%);
+}
+
+.ship[data-id="battleship"] .hull { inset: 21% 1%; }
+.ship.v[data-id="battleship"] .hull { inset: 1% 21%; }
+.ship[data-id="cruiser"] .hull { inset: 24% 0; }
+.ship.v[data-id="cruiser"] .hull { inset: 0 24%; }
+.ship[data-id="destroyer"] .hull { inset: 28% -1%; }
+.ship.v[data-id="destroyer"] .hull { inset: -1% 28%; }
+
+.ship[data-id="destroyer"] .hull,
+.ship.v[data-id="destroyer"] .hull {
+  background-color: #5f6964;
+  filter: brightness(.94) contrast(1.08);
+}
+
+.ship[data-id="submarine"] .hull {
+  inset: 29% 0;
+  clip-path: polygon(0 50%, 7% 25%, 28% 10%, 78% 8%, 94% 27%, 100% 50%, 94% 73%, 78% 92%, 28% 90%, 7% 75%);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 17%, rgba(170, 176, 160, .11) 17.3% 17.8%, transparent 18% 34%),
+    url("textures/steel-grain.svg") center / 72px 48px repeat,
+    linear-gradient(#414947 0 20%, #273130 36% 57%, #111b1d 65% 100%);
+}
+
+.ship.v[data-id="submarine"] .hull {
+  inset: 0 29%;
+  clip-path: polygon(50% 0, 75% 7%, 90% 28%, 92% 78%, 73% 94%, 50% 100%, 27% 94%, 8% 78%, 10% 28%, 25% 7%);
+  background:
+    repeating-linear-gradient(180deg, transparent 0 17%, rgba(170, 176, 160, .11) 17.3% 17.8%, transparent 18% 34%),
+    url("textures/steel-grain.svg") center / 48px 72px repeat,
+    linear-gradient(90deg, #414947 0 20%, #273130 36% 57%, #111b1d 65% 100%);
+}
+
+/* Deck plating, waterline grime, and rivet-scale surface variation. */
+.shipDetails::before {
+  background:
+    radial-gradient(circle at 13% 27%, rgba(68, 32, 21, .52) 0 .45px, transparent .95px),
+    radial-gradient(circle at 64% 72%, rgba(224, 216, 180, .16) 0 .4px, transparent .9px),
+    radial-gradient(circle at 83% 38%, rgba(74, 38, 25, .42) 0 .4px, transparent .9px),
+    repeating-linear-gradient(90deg, transparent 0 17px, rgba(238, 236, 209, .055) 17px 17.5px);
+  background-size: 23px 19px, 31px 27px, 21px 29px, auto;
+  mix-blend-mode: multiply;
+  opacity: .75;
+}
+
+.shipDetails::after {
+  border: 0;
+  background: linear-gradient(180deg, rgba(244,242,218,.15), transparent 30%, transparent 64%, rgba(0,5,6,.4));
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, .54);
+}
+
+/* Fine equipment replaces the oversized, toy-like circles. */
+.shipFeature {
+  filter: drop-shadow(0 .65px .45px rgba(0,0,0,.9));
+}
+
+.shipFeature.turret {
+  border: .5px solid #222925;
+  border-radius: 18% 42% 42% 18%;
+  clip-path: polygon(0 18%, 68% 8%, 100% 32%, 100% 68%, 68% 92%, 0 82%);
+  background: linear-gradient(180deg, #a8aaa0, #6a706a 48%, #343e3e 100%);
+  box-shadow: inset 0 .5px rgba(255,255,255,.28), 0 .5px 1px #000;
+}
+
+.shipFeature.turret::after,
+.shipFeature.turret.heavy::before {
+  left: 73%;
+  top: 34%;
+  width: 150%;
+  height: 8%;
+  border-radius: 0;
+  background: linear-gradient(#b1b3aa, #343d3c);
+  box-shadow: 0 .5px #111;
+}
+
+.shipFeature.turret.heavy::before {
+  top: 59%;
+  height: 8%;
+}
+
+.ship.v .shipFeature.turret::after,
+.ship.v .shipFeature.turret.heavy::before {
+  left: 34%;
+  top: 73%;
+  width: 8%;
+  height: 150%;
+}
+
+.ship.v .shipFeature.turret.heavy::before {
+  left: 59%;
+}
+
+.shipFeature.turret.aft::after,
+.shipFeature.turret.aft::before {
+  left: auto;
+  right: 73%;
+  transform: none;
+}
+
+.ship.v .shipFeature.turret.aft::after,
+.ship.v .shipFeature.turret.aft::before {
+  left: auto;
+  right: auto;
+  top: auto;
+  bottom: 73%;
+}
+
+.shipFeature.bridge {
+  border: .5px solid #252b28;
+  clip-path: polygon(8% 20%, 25% 0, 75% 0, 92% 20%, 82% 100%, 18% 100%);
+  background: linear-gradient(90deg, #414943, #9b9d91 42%, #5c645d 58%, #2b3432);
+}
+
+.shipFeature.bridge::before {
+  left: 14%; right: 14%; top: 15%; height: 17%;
+  background: repeating-linear-gradient(90deg, #7b9993 0 9%, #17201f 10% 20%);
+}
+
+.shipFeature.funnel {
+  border-width: .5px;
+  background: radial-gradient(ellipse, #070a09 0 40%, #74776d 43% 67%, #303735 70%);
+}
+
+.shipFeature.mast {
+  background: #8e9288;
+  box-shadow: 0 0 0 .35px #141918;
+}
+
+.shipFeature.mast::after {
+  width: 460%;
+  height: 1px;
+  background: #747b74;
+}
+
+.ship.v .shipFeature.mast::after {
+  width: 1px;
+  height: 460%;
+}
+
+.shipFeature.mast.radar::before {
+  width: 430%;
+  border-width: .5px;
+  background: repeating-conic-gradient(#26302e 0 8deg, transparent 8deg 27deg);
+}
+
+.shipFeature.lifeboat {
+  border-width: .5px;
+  background: linear-gradient(#a49470, #6d654e 55%, #34362f);
+}
+
+.shipFeature.director {
+  z-index: 7;
+  border: .5px solid #252b29;
+  border-radius: 36%;
+  background: radial-gradient(circle at 42% 38%, #b0b2a8 0 20%, #606963 23% 60%, #27302f 64%);
+}
+
+.shipFeature.director::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 36%; width: 145%; height: 18%;
+  transform: translateX(-50%);
+  background: #545f5b;
+  box-shadow: 0 .5px #111;
+}
+
+.shipFeature.aa,
+.shipFeature.deckGun {
+  z-index: 7;
+  border: .5px solid #222927;
+  border-radius: 50%;
+  background: radial-gradient(circle, #9da097 0 22%, #4c5652 27% 66%, #202827 70%);
+}
+
+.shipFeature.aa::after,
+.shipFeature.deckGun::after {
+  content: "";
+  position: absolute;
+  left: 55%; top: 44%; width: 110%; height: 10%;
+  background: #626b66;
+}
+
+.shipFeature.anchor {
+  z-index: 6;
+  border-radius: 50%;
+  border: .5px solid rgba(21,27,26,.9);
+  background: #5e6762;
+}
+
+.shipFeature.depthCharge {
+  z-index: 6;
+  border-radius: 99px;
+  border: .5px solid #1d2423;
+  background: repeating-linear-gradient(90deg, #69716b 0 24%, #29312f 25% 38%);
+}
+
+.shipFeature.rudder {
+  z-index: 4;
+  clip-path: polygon(0 35%, 100% 0, 100% 100%, 0 65%);
+  background: #27312f;
+}
+
+.shipFeature.launcher {
+  border-width: .5px;
+  background: repeating-linear-gradient(90deg, #7c837d 0 8%, #252d2c 9% 22%);
+}
+
+.shipFeature.sail {
+  border-width: .5px;
+  border-radius: 35% 45% 45% 35%;
+  background: linear-gradient(90deg, #17201f, #5e6762 46%, #1b2625 58%, #0b1415);
+}
+
+.shipFeature.hatch {
+  border-width: .5px;
+  background: radial-gradient(circle, #4a5350 0 36%, #151e1e 42% 70%, #303a38 73%);
+}
+
+.shipFeature.plane {
+  background: #8e938a;
+  opacity: .7;
+}
+
+.shipFeature.runway {
+  border: 0;
+  height: max(1px, var(--h));
+  background: repeating-linear-gradient(90deg, #d0cdb6 0 3%, transparent 3% 10%);
+  opacity: .7;
+}
+
+.ship.v .shipFeature.runway {
+  width: max(1px, var(--h));
+  background: repeating-linear-gradient(180deg, #d0cdb6 0 3%, transparent 3% 10%);
+}
+
+.shipFeature.deckMark {
+  background: rgba(205, 201, 174, .38);
+  box-shadow: none;
+}
+
+.shipFeature.elevator {
+  border-width: .5px;
+  border-color: rgba(215, 211, 181, .3);
+  background: rgba(21, 27, 25, .16);
+}
+
+.shipFeature.island {
+  border-width: .5px;
+  background: linear-gradient(90deg, #2b3330 0 61%, #747a71 62% 78%, #222a29 79%);
+}
+
+/* Damage looks scorched and heavy instead of recoloring the whole model red. */
+.ship.sunk .hull {
+  filter: saturate(.35) brightness(.55) contrast(1.15);
+}
+
+.ship.sunk .shipDetails {
+  filter: sepia(.3) saturate(.45) brightness(.54);
+}
+
+.ship.sunk .shipHit {
+  filter: saturate(.75) brightness(.72);
+}
+
+/* Final-board reveal: surviving enemy ships appear as declassified contacts. */
+#enemyShips.fleet-revealed::before {
+  content: "AFTER ACTION // FLEET DECLASSIFIED";
+  position: absolute;
+  z-index: 30;
+  top: 8px;
+  right: 8px;
+  padding: 4px 6px;
+  border: 1px solid rgba(218, 191, 117, .52);
+  background: rgba(12, 20, 20, .84);
+  color: #d9c48c;
+  font: 700 7px/1.1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  letter-spacing: .1em;
+  box-shadow: 0 2px 8px rgba(0,0,0,.55);
+}
+
+.ship.reveal {
+  animation: fleet-declassify .55s cubic-bezier(.2,.7,.2,1) both;
+}
+
+.ship.reveal.survivor .hull {
+  outline: 1px solid rgba(218, 191, 117, .78);
+  outline-offset: 1px;
+}
+
+.ship.reveal.survivor .shipName {
+  opacity: .86;
+  color: #e1ca8e;
+}
+
+.modalActions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.modalActions .wide {
+  margin: 0;
+}
+
+.modalActions .primary {
+  min-height: 49px;
+}
+
+.reviewBoard {
+  border-color: rgba(207, 180, 106, .48);
+  color: #e4d29e;
+}
+
+@keyframes fleet-declassify {
+  from { opacity: 0; filter: blur(4px) grayscale(1); }
+  to { opacity: .94; filter: none; }
+}
+
+@media (max-width: 430px) {
+  .ship[data-id="carrier"] .hull { inset: 19% 1%; }
+  .ship.v[data-id="carrier"] .hull { inset: 1% 19%; }
+  .ship[data-id="battleship"] .hull { inset: 23% 1%; }
+  .ship.v[data-id="battleship"] .hull { inset: 1% 23%; }
+  .ship[data-id="cruiser"] .hull { inset: 26% 0; }
+  .ship.v[data-id="cruiser"] .hull { inset: 0 26%; }
+  .ship[data-id="destroyer"] .hull { inset: 29% -1%; }
+  .ship.v[data-id="destroyer"] .hull { inset: -1% 29%; }
+  .shipFeature { filter: drop-shadow(0 .4px .3px rgba(0,0,0,.9)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ship.reveal { animation: none; }
+}

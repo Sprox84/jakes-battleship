@@ -1,0 +1,301 @@
+/* Material-realism pass inspired by physical naval plotting tables.
+   Layout remains unchanged; this layer focuses on water, steel, ships, and damage. */
+
+body {
+  background:
+    url("textures/steel-grain.svg") center / 260px 260px repeat,
+    radial-gradient(circle at 50% 8%, rgba(45, 98, 104, .22), transparent 34rem),
+    repeating-linear-gradient(0deg, transparent 0 39px, rgba(137, 178, 177, .025) 39px 40px),
+    repeating-linear-gradient(90deg, transparent 0 39px, rgba(137, 178, 177, .025) 39px 40px),
+    linear-gradient(145deg, #09171a, #030b0e 70%);
+}
+
+.panel {
+  border-color: #555f5e;
+  background:
+    url("textures/steel-grain.svg") center / 220px 220px repeat,
+    linear-gradient(135deg, rgba(134, 149, 145, .11), transparent 22%),
+    linear-gradient(#172326, #0a1518 62%, #080f11);
+  box-shadow:
+    0 28px 70px rgba(0, 0, 0, .72),
+    inset 0 0 0 1px rgba(218, 212, 190, .14),
+    inset 0 0 0 5px #070e10,
+    inset 0 0 35px rgba(0, 0, 0, .52);
+}
+
+.panel::before,
+.panel::after {
+  width: 7px;
+  height: 7px;
+  border: 1px solid #202829;
+  background: radial-gradient(circle at 35% 32%, #d3cbb4, #5d625d 43%, #22292a 68%);
+  box-shadow: inset 0 1px 1px #fff6, 0 1px 3px #000;
+}
+
+.hero {
+  border-left-color: #a99a72;
+  background:
+    url("textures/steel-grain.svg") center / 180px 180px repeat,
+    linear-gradient(90deg, rgba(51, 74, 75, .64), rgba(18, 32, 34, .45));
+  box-shadow: inset 0 1px rgba(255,255,255,.07), inset 0 -1px rgba(0,0,0,.48);
+}
+
+/* A deep physical bezel around the existing single mobile board. */
+.stage {
+  border: 6px solid #222b2c;
+  border-radius: 3px;
+  background:
+    url("textures/steel-grain.svg") center / 180px 180px repeat,
+    linear-gradient(145deg, #55605e, #1a2223 38%, #090f11 75%);
+  box-shadow:
+    0 0 0 1px #737a74,
+    0 0 0 3px #090e0f,
+    0 14px 30px rgba(0,0,0,.62),
+    inset 0 0 0 2px #05090a,
+    inset 0 0 24px #000;
+}
+
+.coordinateLayer::before,
+.coordinateLayer::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #101719;
+  background:
+    radial-gradient(circle, #a7a493 0 16%, #4e5552 18% 38%, transparent 40%),
+    linear-gradient(135deg, #46504e, #151c1d);
+  box-shadow: 0 1px 2px #0008;
+  opacity: .9;
+}
+.coordinateLayer::before { left: 2px; clip-path: polygon(0 0,100% 0,0 100%); }
+.coordinateLayer::after { right: 2px; clip-path: polygon(0 0,100% 0,100% 100%); }
+
+/* Continuous ocean: the grid is drawn over one textured water surface. */
+.stage .board {
+  gap: 0;
+  background:
+    url("textures/ocean-grain.svg") 0 0 / 230px 230px repeat,
+    radial-gradient(ellipse at 18% 22%, rgba(202, 234, 236, .18) 0 1%, transparent 9%),
+    radial-gradient(ellipse at 76% 67%, rgba(150, 210, 218, .12) 0 1%, transparent 10%),
+    linear-gradient(155deg, #126079, #073b50 46%, #052b3c 78%, #082633);
+  background-blend-mode: screen, screen, screen, normal;
+  box-shadow: inset 0 0 36px rgba(0, 8, 14, .65);
+  animation: real-ocean-drift 22s ease-in-out infinite alternate;
+}
+
+.stage::before {
+  opacity: .3;
+  mix-blend-mode: screen;
+  filter: blur(6px);
+}
+
+.stage::after {
+  opacity: .72;
+  background:
+    linear-gradient(112deg, transparent 26%, rgba(218, 248, 255, .08) 44%, transparent 60%),
+    radial-gradient(ellipse at center, transparent 42%, rgba(0, 9, 18, .5) 100%);
+  background-size: 240% 100%, 100% 100%;
+}
+
+.stage .cell:not(.hit):not(.miss) {
+  border: 0;
+  border-right: 1px solid rgba(190, 221, 221, .27);
+  border-bottom: 1px solid rgba(190, 221, 221, .27);
+  border-radius: 0;
+  background: rgba(7, 49, 64, .035);
+  box-shadow: inset 1px 1px rgba(235, 248, 242, .035);
+  animation: none;
+  filter: none;
+}
+
+.stage .cell:not(.hit):not(.miss)::before {
+  background:
+    radial-gradient(ellipse at 28% 24%, rgba(216, 240, 239, .12), transparent 42%),
+    linear-gradient(140deg, rgba(255,255,255,.025), transparent 58%);
+  animation: surface-flicker 7s ease-in-out infinite alternate;
+}
+
+.target .cell:not(:disabled):hover {
+  background: rgba(221, 204, 139, .13);
+  box-shadow: inset 0 0 0 1px rgba(233, 214, 147, .5), inset 0 0 15px rgba(219, 203, 137, .14);
+}
+
+/* Tactical marks rather than fully painted white/red squares. */
+.stage .cell.miss {
+  border: 0;
+  border-right: 1px solid rgba(190, 221, 221, .27);
+  border-bottom: 1px solid rgba(190, 221, 221, .27);
+  border-radius: 0;
+  background: rgba(2, 27, 38, .12);
+  box-shadow: inset 0 0 12px rgba(218, 242, 241, .08);
+}
+
+.stage .cell.miss::after {
+  content: "";
+  left: 35%;
+  top: 35%;
+  width: 30%;
+  height: 30%;
+  border: 2px solid rgba(235, 239, 228, .93);
+  border-radius: 50%;
+  background: rgba(8, 28, 36, .24);
+  box-shadow: 0 1px 3px #001018, inset 0 0 3px rgba(255,255,255,.25);
+}
+
+.stage .cell.hit {
+  border: 0;
+  border-right: 1px solid rgba(190, 221, 221, .27);
+  border-bottom: 1px solid rgba(190, 221, 221, .27);
+  border-radius: 0;
+  background: radial-gradient(circle, rgba(207, 71, 41, .24), rgba(76, 26, 22, .18) 58%, transparent 74%);
+  animation: hit-mark .32s ease-out;
+}
+
+.stage .cell.hit::after {
+  content: "×";
+  color: #ef6249;
+  font-family: Georgia, serif;
+  font-size: clamp(18px, 5vw, 29px);
+  font-weight: 400;
+  text-shadow: 0 1px 2px #250500, 0 0 7px rgba(233, 69, 39, .54);
+}
+
+/* Weathered miniature vessels with pointed bows and less toy-like material. */
+.ship {
+  filter: drop-shadow(0 6px 3px rgba(0, 6, 10, .9)) drop-shadow(0 1px 1px rgba(210, 231, 225, .28));
+}
+
+.ship::after {
+  background:
+    repeating-radial-gradient(ellipse at 76% 50%, rgba(234,249,246,.45) 0 4%, transparent 6% 15%),
+    linear-gradient(90deg, transparent, rgba(206, 241, 241, .45), transparent);
+  filter: blur(2.5px);
+  mix-blend-mode: screen;
+}
+
+.ship.v::after {
+  background:
+    repeating-radial-gradient(ellipse at 50% 76%, rgba(234,249,246,.45) 0 4%, transparent 6% 15%),
+    linear-gradient(180deg, transparent, rgba(206, 241, 241, .45), transparent);
+}
+
+.ship .hull {
+  border-color: rgba(10, 15, 16, .95);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.48),
+    inset 0 -4px 5px rgba(0,0,0,.72),
+    0 0 0 1px rgba(154, 166, 160, .2);
+}
+
+.shipName {
+  padding: 1px 4px;
+  border: 1px solid rgba(210, 218, 205, .15);
+  border-radius: 1px;
+  background: rgba(5, 13, 15, .62);
+  color: rgba(237, 235, 217, .9);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 7px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.ship[data-id="carrier"] .hull {
+  clip-path: polygon(2% 22%, 12% 12%, 84% 6%, 98% 37%, 100% 50%, 98% 63%, 84% 94%, 12% 88%, 2% 76%, 0 58%, 0 42%);
+  background:
+    url("textures/steel-grain.svg") center / 120px 90px repeat,
+    linear-gradient(#a59b87, #756d5f 46%, #4d4d47 49%, #343c3b);
+}
+.ship.v[data-id="carrier"] .hull {
+  clip-path: polygon(22% 2%, 42% 0, 58% 0, 78% 2%, 88% 12%, 94% 84%, 63% 98%, 50% 100%, 37% 98%, 6% 84%, 12% 12%);
+  background:
+    url("textures/steel-grain.svg") center / 90px 120px repeat,
+    linear-gradient(90deg, #a59b87, #756d5f 46%, #4d4d47 49%, #343c3b);
+}
+
+.ship[data-id="battleship"] .hull,
+.ship[data-id="cruiser"] .hull,
+.ship[data-id="destroyer"] .hull {
+  clip-path: polygon(0 38%, 9% 18%, 83% 5%, 100% 50%, 83% 95%, 9% 82%, 0 62%);
+  background:
+    url("textures/steel-grain.svg") center / 95px 70px repeat,
+    linear-gradient(#a9ada5, #6f7671 42%, #3b4647 47%, #202b2e);
+}
+
+.ship.v[data-id="battleship"] .hull,
+.ship.v[data-id="cruiser"] .hull,
+.ship.v[data-id="destroyer"] .hull {
+  clip-path: polygon(38% 0, 62% 0, 82% 9%, 95% 83%, 50% 100%, 5% 83%, 18% 9%);
+  background:
+    url("textures/steel-grain.svg") center / 70px 95px repeat,
+    linear-gradient(90deg, #a9ada5, #6f7671 42%, #3b4647 47%, #202b2e);
+}
+
+.ship[data-id="destroyer"] .hull {
+  background:
+    url("textures/steel-grain.svg") center / 80px 60px repeat,
+    linear-gradient(#b3b6ac, #747b76 42%, #394649 47%, #1d292c);
+}
+
+.ship[data-id="submarine"] .hull {
+  border-color: #071012;
+  background:
+    url("textures/steel-grain.svg") center / 80px 80px repeat,
+    linear-gradient(#485454, #273638 43%, #101d21 50%, #081216);
+}
+
+.ship.sel .hull {
+  outline: 2px solid rgba(233, 213, 144, .92);
+  outline-offset: 2px;
+}
+
+/* More physical controls and counters. */
+.tool,
+.wide,
+.dock button,
+.status,
+.toast,
+.modalCard {
+  background-image: url("textures/steel-grain.svg"), linear-gradient(#253033, #111a1d);
+  background-size: 160px 160px, auto;
+}
+
+.primary {
+  background:
+    url("textures/steel-grain.svg") center / 150px 150px repeat,
+    repeating-linear-gradient(135deg, rgba(255,255,255,.055) 0 7px, transparent 7px 14px),
+    linear-gradient(#c7a75d, #87672d);
+}
+
+.status {
+  background:
+    url("textures/steel-grain.svg") center / 160px 160px repeat,
+    linear-gradient(90deg, rgba(32, 76, 58, .84), rgba(14, 40, 34, .9));
+}
+.status.cpu {
+  background:
+    url("textures/steel-grain.svg") center / 160px 160px repeat,
+    linear-gradient(90deg, rgba(91, 42, 34, .86), rgba(45, 25, 22, .92));
+}
+
+@keyframes real-ocean-drift {
+  from { background-position: 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 46px 22px, 18px 8px, -20px 13px, 0 0; }
+}
+
+@keyframes surface-flicker {
+  from { opacity: .45; transform: translate(-4%, -3%) scale(1.05); }
+  to { opacity: .9; transform: translate(4%, 3%) scale(1.12); }
+}
+
+@keyframes hit-mark {
+  0% { transform: scale(.4); opacity: 0; }
+  75% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage .board,
+  .stage .cell:not(.hit):not(.miss)::before { animation: none; }
+}

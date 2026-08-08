@@ -1,0 +1,66 @@
+/* Naval grid gutters and coordinate labels. */
+.stage {
+  --coordinate-gutter: 22px;
+}
+
+.stage .board {
+  padding: var(--coordinate-gutter) 4px 4px var(--coordinate-gutter);
+}
+
+.coordinateLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  color: #dff7ff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 950;
+  line-height: 1;
+  text-shadow: 0 1px 2px #00111e, 0 0 6px rgba(73, 198, 255, .5);
+}
+
+.coordinateLabel {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  min-width: 14px;
+  min-height: 14px;
+  transform: translate(-50%, -50%);
+  user-select: none;
+}
+
+.coordinateLabel.column {
+  color: #ffe57b;
+}
+
+.coordinateCorner {
+  position: absolute;
+  left: calc(var(--coordinate-gutter) / 2);
+  top: calc(var(--coordinate-gutter) / 2);
+  transform: translate(-50%, -50%);
+  color: #73c7e8;
+  font-size: 11px;
+  opacity: .9;
+}
+
+.ownWrap .stage {
+  --coordinate-gutter: 18px;
+}
+
+.ownWrap .coordinateLayer {
+  font-size: 8px;
+}
+
+.toast {
+  max-width: calc(100vw - 24px);
+  white-space: normal;
+  text-align: center;
+}
+
+@media (max-width: 390px) {
+  .stage { --coordinate-gutter: 19px; }
+  .coordinateLayer { font-size: 9px; }
+  .ownWrap .stage { --coordinate-gutter: 16px; }
+  .ownWrap .coordinateLayer { font-size: 7px; }
+}

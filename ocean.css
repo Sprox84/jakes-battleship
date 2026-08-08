@@ -1,0 +1,106 @@
+/* Animated ocean surface. Kept separate so the visual system can grow
+   without adding more weight to the game's HTML file. */
+.stage {
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(91, 210, 255, .2), transparent 26%),
+    linear-gradient(145deg, #063d69, #052743 68%, #031a2d);
+  box-shadow:
+    inset 0 0 34px rgba(0, 10, 24, .5),
+    0 12px 28px rgba(0, 7, 18, .25);
+}
+
+.stage .board {
+  z-index: 1;
+}
+
+.stage::before,
+.stage::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Broad, slow caustics that travel across the entire ocean. */
+.stage::before {
+  z-index: 2;
+  inset: -45%;
+  background:
+    repeating-radial-gradient(
+      ellipse at 28% 42%,
+      rgba(156, 231, 255, .16) 0 1.5%,
+      transparent 2.2% 7.5%
+    ),
+    repeating-radial-gradient(
+      ellipse at 74% 58%,
+      rgba(124, 219, 255, .11) 0 1%,
+      transparent 2% 8.5%
+    );
+  mix-blend-mode: screen;
+  filter: blur(4px);
+  opacity: .7;
+  animation: ocean-caustics 16s linear infinite;
+}
+
+/* A soft moving reflection plus deeper edges gives the board some depth. */
+.stage::after {
+  z-index: 3;
+  inset: 0;
+  background:
+    linear-gradient(112deg, transparent 20%, rgba(218, 248, 255, .13) 43%, transparent 60%),
+    radial-gradient(ellipse at center, transparent 46%, rgba(0, 21, 42, .28) 100%);
+  background-size: 220% 100%, 100% 100%;
+  background-position: 130% 0, 0 0;
+  animation: ocean-glint 9s ease-in-out infinite;
+}
+
+.cell:not(.hit):not(.miss) {
+  background:
+    radial-gradient(ellipse at 30% 18%, rgba(139, 226, 255, .24), transparent 34%),
+    linear-gradient(145deg, #168fc8 0%, #0875b3 48%, #075d96 100%);
+  background-size: 170% 170%, 145% 145%;
+  animation: ocean-cell 7s ease-in-out infinite alternate;
+}
+
+/* Break up the grid-wide motion so the water does not look mechanical. */
+.cell:nth-child(3n) { animation-delay: -1.7s; }
+.cell:nth-child(4n) { animation-delay: -3.3s; }
+.cell:nth-child(7n) { animation-delay: -5.1s; }
+
+.cell:not(.hit):not(.miss)::before {
+  background:
+    linear-gradient(125deg, rgba(255, 255, 255, .14), transparent 42%),
+    linear-gradient(305deg, rgba(30, 190, 234, .12), transparent 48%);
+  animation: ocean-ripple 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes ocean-caustics {
+  0% { transform: translate3d(-4%, -2%, 0) rotate(0deg) scale(1); }
+  50% { transform: translate3d(5%, 3%, 0) rotate(4deg) scale(1.05); }
+  100% { transform: translate3d(-4%, -2%, 0) rotate(8deg) scale(1); }
+}
+
+@keyframes ocean-glint {
+  0%, 18% { background-position: 130% 0, 0 0; opacity: .55; }
+  54% { opacity: .85; }
+  82%, 100% { background-position: -120% 0, 0 0; opacity: .55; }
+}
+
+@keyframes ocean-cell {
+  from { background-position: 10% 18%, 0% 0%; filter: saturate(.94); }
+  to { background-position: 82% 74%, 100% 80%; filter: saturate(1.08); }
+}
+
+@keyframes ocean-ripple {
+  from { transform: translate3d(-8%, -5%, 0) scale(1.08); opacity: .7; }
+  to { transform: translate3d(7%, 6%, 0) scale(1.18); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage::before,
+  .stage::after,
+  .cell:not(.hit):not(.miss),
+  .cell:not(.hit):not(.miss)::before {
+    animation: none;
+  }
+}

@@ -1,0 +1,176 @@
+/* High-resolution pre-rendered ship assets. The game still positions vessels
+   in grid space; only their visual renderer changes. */
+
+.spriteShip {
+  isolation: isolate;
+  filter: none;
+}
+
+.spriteShip .shipSprite {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  filter:
+    drop-shadow(0 4px 2px rgba(0, 5, 7, .92))
+    drop-shadow(0 1px .6px rgba(213, 226, 217, .3));
+  transition: filter .16s ease, opacity .3s ease;
+}
+
+.spriteShip::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 2%;
+  right: 2%;
+  top: 32%;
+  bottom: 32%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(ellipse at 8% 50%, rgba(234, 250, 249, .52) 0 2%, transparent 3% 8%),
+    linear-gradient(90deg, rgba(235,249,247,.4), transparent 36%);
+  filter: blur(2.5px);
+  opacity: .46;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.spriteShip.v::before {
+  left: 32%;
+  right: 32%;
+  top: 2%;
+  bottom: 2%;
+  background:
+    repeating-radial-gradient(ellipse at 50% 8%, rgba(234, 250, 249, .52) 0 2%, transparent 3% 8%),
+    linear-gradient(180deg, rgba(235,249,247,.4), transparent 36%);
+}
+
+.spriteShip::after {
+  opacity: .22;
+}
+
+.spriteShip.sel .shipSprite {
+  filter:
+    drop-shadow(0 0 2px #f1d985)
+    drop-shadow(0 0 6px rgba(223, 190, 94, .9))
+    drop-shadow(0 5px 2px rgba(0, 5, 7, .92));
+}
+
+.spriteShip.drag .shipSprite {
+  filter:
+    brightness(1.12)
+    drop-shadow(0 10px 5px rgba(0, 5, 7, .9));
+}
+
+.spriteShip .shipName {
+  z-index: 10;
+  padding: 2px 4px;
+  background: rgba(6, 12, 13, .8);
+  border-color: rgba(215, 204, 164, .3);
+}
+
+.spriteShip.sunk .shipSprite {
+  opacity: .9;
+  filter:
+    sepia(.62)
+    saturate(.48)
+    brightness(.62)
+    contrast(1.22)
+    drop-shadow(0 3px 2px rgba(0,0,0,.94));
+}
+
+.spriteShip.sinkingNow .shipSprite {
+  filter:
+    sepia(.35)
+    saturate(.62)
+    brightness(.58)
+    drop-shadow(0 4px 2px rgba(0,0,0,.94));
+}
+
+.spriteShip.reveal.survivor .shipSprite {
+  filter:
+    drop-shadow(0 0 1px rgba(228, 200, 119, .9))
+    drop-shadow(0 4px 2px rgba(0, 5, 7, .92));
+}
+
+/* Shell holes remain compact scorched areas instead of cartoon fireballs. */
+.spriteShip .shipHit {
+  z-index: 12;
+  width: clamp(8px, calc(44% / var(--len)), 14px);
+  border: 0;
+  background:
+    radial-gradient(circle, rgba(16,9,7,.95) 0 20%, rgba(80,27,14,.82) 25% 42%, rgba(21,20,17,.72) 48% 62%, transparent 70%);
+  box-shadow:
+    0 0 2px rgba(255, 90, 31, .35),
+    inset 0 0 2px #000;
+  filter: none;
+}
+
+.spriteShip:not(.v) .shipHit {
+  width: clamp(8px, calc(44% / var(--len)), 14px);
+}
+
+.spriteShip.v .shipHit {
+  width: clamp(8px, 44%, 14px);
+}
+
+.spriteShip .shipHit::before {
+  display: none;
+}
+
+.spriteShip .shipHit::after {
+  content: "×";
+  display: grid;
+  position: absolute;
+  inset: -22%;
+  place-items: center;
+  color: #d72d24;
+  font: 900 clamp(9px, 2vw, 14px)/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-shadow: 0 1px 1px #170300, 0 0 3px rgba(212,42,27,.52);
+}
+
+.spriteShip.sinkingNow {
+  animation: sprite-settle 1.45s cubic-bezier(.3,.05,.72,.9) forwards;
+}
+
+@keyframes sprite-settle {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  38% { transform: translateY(1%) rotate(2deg); opacity: 1; }
+  72% { transform: translateY(4%) rotate(4deg) scale(.985); opacity: .94; }
+  100% { transform: translateY(7%) rotate(5deg) scale(.97); opacity: .86; }
+}
+
+.navalFxCanvas {
+  position: absolute;
+  z-index: 34;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+@media (max-width: 430px) {
+  .spriteShip .shipSprite {
+    filter:
+      drop-shadow(0 2px 1px rgba(0, 5, 7, .94))
+      drop-shadow(0 .5px .4px rgba(213, 226, 217, .26));
+  }
+
+  .spriteShip .shipHit {
+    width: clamp(7px, calc(46% / var(--len)), 12px);
+  }
+
+  .spriteShip:not(.v) .shipHit { width: clamp(7px, calc(46% / var(--len)), 12px); }
+  .spriteShip.v .shipHit { width: clamp(7px, 46%, 12px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spriteShip .shipSprite { transition: none; }
+}
